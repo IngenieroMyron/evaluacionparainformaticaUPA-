@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+
 
 const FormPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -15,15 +17,111 @@ const FormPage: React.FC = () => {
     email: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if(formData.age<18){
+    Swal.fire({
+      title: 'Información',
+      text: 'Debes ser mayor de edad para registrarte',
+      icon: 'warning',
+      confirmButtonText: 'Aceptar',
+    });
+  }else{
+  const validateForm = (): boolean => {
+      console.log("Validando formulario con datos:", formData);
+    
+      if (!formData.name || formData.name.trim() === '') {
+      console.error("El campo 'name' es inválido o está vacío.");
+      return false;
+    }
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      console.error("El campo 'email' es inválido.");
+      return false;
+    }
+  
+    if (!formData.age || formData.age <= 0) {
+      console.error("El campo 'age' debe ser un número mayor a 0.");
+      return false;
+    }
+  
+    if (!formData.phoneNumber || formData.phoneNumber.length < 8) {
+      console.error("El campo 'phoneNumber' debe tener al menos 8 dígitos.");
+      return false;
+    }
+  
+    if (!formData.birthDate || isNaN(Date.parse(formData.birthDate))) {
+      console.error("El campo 'birthDate' es inválido.");
+      return false;
+    }
+  
+    console.log("Formulario válido");
+    return true;
+  };
 
-    if (validateForm()) {
-      console.log('Formulario enviado:', formData);
+ 
+  console.log("Datos del formulario antes de validar:", formData);
+  const isFormValid = validateForm();
+  console.log("¿Formulario válido?:", isFormValid);
+    if (isFormValid) {
+
+      const requestData = {
+        Nombre: formData.name,  
+        Fecha: formData.birthDate,  
+        Telefono: formData.phoneNumber, 
+        Correo: formData.email,   
+      };
+  
+        //Envio de datos al backend.
+        try {
+        const response = await fetch('http://localhost:3000/guardar_usuario/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+          
+        });
+        console.log("Respuesta recibida:", response);
+
+        const data = await response.json();
+        console.log("Datos JSON:", data);
+        if (data.success) {
+          Swal.fire({
+            title: 'Información',
+            text: 'Registro exitoso',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+          });
+          handleClear();
+        } else {
+          Swal.fire({
+            title: 'Información',
+            text: 'Lo sentimos, ocurrio un error intenta de nuevo',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar',
+          });
+        }
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+        Swal.fire({
+          title: 'Información',
+          text: 'Lo sentimos, ocurrio un error intenta de nuevo',
+          icon: 'warning',
+          confirmButtonText: 'Aceptar',
+        });
+      }
     } else {
-      console.log('Formulario con errores, no se envió');
+      Swal.fire({
+        title: 'Información',
+        text: 'Lo sentimos, ocurrio un error intenta de nuevo',
+        icon: 'warning',
+        confirmButtonText: 'Aceptar',
+      });
     }
   };
+}
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,11 +163,6 @@ const FormPage: React.FC = () => {
 
     if (!/^\d{8}$/.test(formData.phoneNumber)) {
       errors.phoneNumber = 'El número de teléfono debe tener 8 dígitos.';
-      isValid = false;
-    }
-
-    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(formData.email)) {
-      errors.email = 'El correo electrónico no tiene un formato válido.';
       isValid = false;
     }
 
@@ -167,7 +260,6 @@ const FormPage: React.FC = () => {
             onChange={handleChange}
             placeholder="Ingrese su correo electrónico"
             required
-            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
           />
           {formErrors.email && <span className="error">{formErrors.email}</span>}
         </div>
