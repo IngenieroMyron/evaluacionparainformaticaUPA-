@@ -5,7 +5,6 @@ import Swal from 'sweetalert2';
 const HomePage: React.FC = () => {
 
   useEffect(() => {
-    // Mostrar el alert al cargar la página
     Swal.fire({
       title: 'Bienvenido',
       text: 'Ahorros. Prestamos. Y Más',
@@ -34,7 +33,7 @@ const HomePage: React.FC = () => {
       </nav>
 
       <div className="Contenedor-Imagen">
-        <img src="../public/images/Logotipo.png" alt="Imagen responsiva" />
+        <img src="../public/Images/Logotipo.png" alt="Imagen responsiva" />
       </div>
     </div>
   );
