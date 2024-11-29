@@ -1,0 +1,24 @@
+CREATE DATABASE EvaluacionMyronMorales;
+
+Create table EstadoUsuario
+(
+Id int primary key not null auto_increment,
+Titulo varchar(50) not null,
+Clave varchar(50) not null
+);
+
+insert into EstadoUsuario (Titulo,Clave) VALUES ('Activo','activo');
+insert into EstadoUsuario (Titulo,Clave) VALUES ('Baja Permanente','baja');
+
+select * from EstadoUsuario;
+
+Create table Usuario
+(
+Id int primary key not null auto_increment,
+Nombre varchar(50) not null,
+Fecha date not null,
+Telefono varchar(15) not null,
+Correo varchar(50) not null,
+Creacion date not null,
+EstadoUsuarioId int not null
+);
