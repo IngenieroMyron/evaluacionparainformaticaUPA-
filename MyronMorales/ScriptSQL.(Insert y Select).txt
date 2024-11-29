@@ -1,0 +1,5 @@
+INSERT INTO USUARIO (Nombre, Fecha, Telefono, Correo, Creacion, EstadoUsuarioId) VALUES (?, ?, ?, ?, ?, ?)
+
+' SELECT T0.Id, T0.Nombre,T0.Fecha,T0.Telefono,T0.Correo,T0.Creacion,T1.Titulo FROM USUARIO T0 '+
+              ' INNER JOIN EstadoUsuario T1'+
+              ' ON T0.EstadoUsuarioId=T1.Id';

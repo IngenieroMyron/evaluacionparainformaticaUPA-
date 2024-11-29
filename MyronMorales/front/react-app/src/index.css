@@ -159,3 +159,60 @@ button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 20px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  border: 1px solid #ddd;
+}
+
+td {
+  background-color: #f9f9f9;
+  color:black;
+  padding: 15px 20px;
+  text-align: left;
+  font-size: 14px;
+  border: 1px solid #ddd;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+tr:nth-child(even) {
+  background-color: #f4f4f4;
+}
+
+td.estado-activo {
+  color: green;
+  font-weight: bold;
+}
+
+td.estado-inactivo {
+  color: red;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 24px;
+  }
+}
